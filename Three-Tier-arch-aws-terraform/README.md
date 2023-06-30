@@ -31,6 +31,7 @@ Partition key : LockID
 create table
 
 
+
 http://demo-alb-66491749.ap-south-1.elb.amazonaws.com
 
 http://demo-alb-66491749.ap-south-1.elb.amazonaws.com/phpinfo.php
