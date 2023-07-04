@@ -1,0 +1,24 @@
+resource "aws_instance" "Jenkins-instance" {
+  ami           = var.os-name
+  instance_type = var.instance-type
+  key_name = var.key-pair
+  subnet_id = aws_subnet.Demo-web-public-subent-1a.id
+  vpc_security_group_ids = [aws_security_group.jenkins-sg.id]
+
+ tags = {
+    Name = "Jenkins-instance"
+  }
+
+  user_data = <<-EOF
+  #!/bin/bash
+  sudo apt-get update -y
+  sudo apt install openjdk-17-jre -y
+  curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+  echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+  sudo apt-get update -y
+  sudo apt-get install jenkins -y
+  sudo systemctl enable jenkins
+  sudo systemctl start jenkins
+  sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+  EOF
+}
